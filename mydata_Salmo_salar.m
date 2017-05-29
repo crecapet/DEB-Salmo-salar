@@ -76,12 +76,12 @@ data.Lp = 35;      units.Lp = 'cm';   label.Lp = 'forked length at puberty'; bib
 %   comment.Wp = 'weigth at 20 montsh post hatch, when rapid egg growth occurred'; 
     
  % ultimate 
-data.am = 7*365;  units.am = 'd';    label.am = 'life span'; bibkey.am = {'fishbase'};temp.am = C2K(7); units.temp.am = 'K'; label.temp.am = 'temperature';
+data.am = 10*365;  units.am = 'd';    label.am = 'life span'; bibkey.am = {'fishbase'};temp.am = C2K(7); units.temp.am = 'K'; label.temp.am = 'temperature';
 data.Li = 150;     units.Li = 'cm';   label.Li = 'ultimate total length';  bibkey.Li = 'fishbase';
-data.Wwi = 25000; %46800
+data.Wwi = 25000;
 units.Wwi = 'g';    label.Wwi = 'ultimate wet weight';    bibkey.Wwi = 'fishbase';
-data.Ri = 16000/2/365; units.Ri = '#/d'; label.Ri = 'maximum reprod rate'; bibkey.Ri = 'Wiki';temp.Ri = C2K(7); units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
-  comment.Ri = '2000 till 3000 eggs per kg';
+data.Ri = 16000/2/365; units.Ri = '#/d'; label.Ri = 'maximum reprod rate'; bibkey.Ri = 'Wiki';temp.Ri = C2K(12); units.temp.Ri = 'K'; label.temp.Ri = 'temperature';
+
 
 
   
@@ -182,7 +182,7 @@ data.tLps = [...	% time since smolting (d),	size (cm)
 data.tLps(:,1)=data.tLps(:,1)+ 2*365;
 
  units.tLps   = {'d', 'g'};  label.tLps = {'time since smolt', 'fork length'};  
- temp.tLps    = C2K(10);  units.temp.tLps = 'K'; label.temp.tLps = 'temperature';
+ temp.tLps    = C2K(12);  units.temp.tLps = 'K'; label.temp.tLps = 'temperature';
  bibkey.tLps = 'Handeland2008';
 
 data.LWd = [... % fork length (cm),  dry weight (g) (parrs)

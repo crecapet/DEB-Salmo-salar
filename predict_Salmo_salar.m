@@ -179,7 +179,17 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
     Lw = Lw_i - (Lw_i - Lw_0) .* exp( - rT_B .* tWwps(:,1)); % cm, expected length at time
    EWwps = (del_M * Lw).^3 * (1 + f_tL * w);
    
-  
+% 
+%    % tLps bis no bertalanffy
+%   L0 = 20* del_M; % Condition initiale
+%   E0 = L0^3 * p_Am/ v; H0 = E_Hb;
+%   f1 = f_ShelClar1995; f0 = 0.6 * f_ShelClar1995; f2 = 0.8 * f_ShelClar1995;  % -, set food levels
+%   ELH_0 = [f0 * E0; L0; H0]; ELH_1 = [f1 * E0; L0; H0]; ELH_2 = [f2 * E0; L0; H0]; % state vector at start
+%   %
+%   [a ELH] = ode45(@dget_ELH_pj, [0; tL_ShelClar1995_1(:,1)], ELH_1, [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f1, E_Hb, E_Hj, tT.tL_ShelClar1995_1, T_A, T_ref); 
+%   ELH(1,:) = []; E = ELH(:,1); L = ELH(:,2); ELw_ShelClar1995_1 = L/ del_M;  EWw_ShelClar1995_1 = L.^3 + E * w_E/ mu_E/ d_E;  % g, wet weight
+%   %
+   
 
   % pack to output
   prdData.LR = ER;
