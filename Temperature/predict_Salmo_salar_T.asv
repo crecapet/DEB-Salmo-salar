@@ -219,6 +219,11 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
 %EWw_ShelClar1995_1 = L.^3 + (E+R) * w_E/ mu_E/ d_E;
 %ELps = ELHR(:,2);
 
+t_b
+t_j
+t_p
+
+
 
    % pack to output
   prdData.LR = ER;

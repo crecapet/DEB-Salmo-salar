@@ -18,8 +18,8 @@ par.p_T = 0;          free.p_T   = 0;   units.p_T = 'J/d.cm^2';   label.p_T = '{
 par.k_J = 0.002;  free.k_J   = 0;   units.k_J = '1/d';        label.k_J = 'maturity maint rate coefficient'; 
 par.E_G = 5025;       free.E_G   = 0;   units.E_G = 'J/cm^3';     label.E_G = '[E_G], spec cost for structure'; 
 par.E_Hh = 8.22e-01*0.9; free.E_Hh  = 1;   units.E_Hh = 'J';         label.E_Hh = 'maturity at hatch';
-par.E_Hb = 8.222e-01; free.E_Hb  = 1;   units.E_Hb = 'J';         label.E_Hb = 'maturity at birth'; 
-par.E_Hj = 1.146e+01; free.E_Hj  = 1;   units.E_Hj = 'J';         label.E_Hj = 'maturity at metam'; 
+par.E_Hb = 8.222; free.E_Hb  = 1;   units.E_Hb = 'J';         label.E_Hb = 'maturity at birth'; 
+par.E_Hj = 1000+01; free.E_Hj  = 1;   units.E_Hj = 'J';         label.E_Hj = 'maturity at metam'; 
 par.E_Hp = 8.788e+04; free.E_Hp  = 1;   units.E_Hp = 'J';         label.E_Hp = 'maturity at puberty'; 
 par.h_a = 8.303e-29;  free.h_a   = 1;   units.h_a = '1/d^2';      label.h_a = 'Weibull aging acceleration'; 
 par.s_G = 10;         free.s_G   = 0;   units.s_G = '-';          label.s_G = 'Gompertz stress coefficient'; 
@@ -30,8 +30,8 @@ par.T_A   = 8000;   free.T_A   = 0;    units.T_A = 'K';        label.T_A = 'Arrh
 par.del_M = 0.16;   free.del_M = 1;    units.del_M = '-';      label.del_M = 'shape coefficient';
 
 %% environmental parameters (temperatures are in auxData)
-par.f = 1.0;        free.f     = 0;    units.f = '-';          label.f    = 'scaled functional response for 0-var data';
-par.f_tL = 0.8;     free.f_tL  = 1;    units.f_tL = '-';       label.f_tL = 'scaled functional response for 1-var data';
+par.f = 0.7;        free.f     = 0;    units.f = '-';          label.f    = 'scaled functional response for 0-var data';
+par.f_tL = 1;     free.f_tL  = 1;    units.f_tL = '-';       label.f_tL = 'scaled functional response for 1-var data';
 par.f_tWp = 0.7;    free.f_tWp  = 1;   units.f_tWp = '-';      label.f_tWp = 'scaled functional response for 1-var data';
 
 %% set chemical parameters from Kooy2010 

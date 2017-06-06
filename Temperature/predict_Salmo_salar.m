@@ -1,7 +1,5 @@
 function [prdData, info] = predict_Salmo_salar(par, data, auxData)
   
-
-
   % unpack par, data, auxData
   cPar = parscomp_st(par); vars_pull(par); 
   vars_pull(cPar);  vars_pull(data);  vars_pull(auxData);
@@ -11,18 +9,14 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
     
   pars_tj = [g; k; l_T; v_Hb; v_Hj; v_Hp];
   [t_j, t_p, t_b, l_j, l_p, l_b, l_i, rho_j, rho_B, info] = get_tj(pars_tj, f_tL);
-
-
-
   if info ~= 1 % numerical procedure failed
      fprintf('warning: invalid parameter value combination for get_tj \n')
   end
   
    s_M = l_j / l_b;
     filterChecks = k * v_Hp >= f_tL ^3 * s_M^3  || ...         % constraint required for reaching puberty with f_tL
-     E_Hh>=E_Hb || ...
-     E_Hb>=E_Hj || ...
-      E_Hj>=E_Hp ;
+     E_Hh>=E_Hb ;%|| ...
+   %    E_Hj>=E_Hp ;
    
    if filterChecks  
      info = 0;
@@ -39,6 +33,7 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
   TC_Ri = tempcorr(temp.Ri, T_ref, T_A);
   
   %TC_tWw = tempcorr(temp.tWw, T_ref, T_A);
+  TC_tLps = tempcorr(temp.tLps, T_ref, T_A);
   TC_LR = tempcorr(temp.LR, T_ref, T_A);
   TC_tWwp = tempcorr(temp.tWwp, T_ref, T_A);
   TC_tWwps = tempcorr(temp.tWwps, T_ref, T_A);
@@ -69,8 +64,8 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
   a_b = t_b/ k_M; aT_b = a_b/ TC_ab;   % d, age at birth at f and T diveded by correction factor TC_ab
   
   % metamorphosis
- L_j = L_m * l_j;                  % cm, structural length at metam
-  Lw_j = L_j/ del_M;                % cm, physical length at metam at f
+% L_j = L_m * l_j;                  % cm, structural length at metam
+%  Lw_j = L_j/ del_M;                % cm, physical length at metam at f
 %  Ww_j = L_j^3 * (1 + f * w);       % g, wet weight at metam
 %  aT_j = t_j / k_M/ TC_aj;          % d, time since birth at metam
   
@@ -141,28 +136,17 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
    aT_b = t_b/ k_M/ TC_tWwp; aT_j = t_j/ k_M/ TC_tWwp;   
     Lw_b = l_b * L_m/ del_M; 
     Lw_j = l_j * L_m/ del_M; 
-    
-   if min(tWwp(:,1)) < t_j 
    t_j = aT_j - aT_b; % time since birth at metamorphosis
    t_bj = tWwp(tWwp(:,1) < t_j,1); % select times between birth & metamorphosis  
    Lw_bj = Lw_b * exp(t_bj * rT_j/3); % exponential growth as V1-morph
-   EW_bj = (Lw_bj * del_M).^3 * (1 + f_tWp * w);
-   EWwp = [EW_bj]; % catenate lengths
-   end
    
-   if max(tWwp(:,1))>= t_j
    t_ji = tWwp(tWwp(:,1) >= t_j,1); % selects times after metamorphosis
    Lw_js = Lw_i - (Lw_i - Lw_j) * exp( - rT_B_tWwp * (t_ji-t_j)); % cm, expected length at time
-   EW_ji = (Lw_js * del_M).^3 * (1 + f_tWp * w);
-   end
    
-    if exist('EW_bi')& exist('EW_ji')
-     EWwp = [EW_bj; EW_ji]; % catenate lengths   
-    elseif exist('EW_bi')
- EWwp = EW_bj; 
-    else
-  EWwp = EW_ji; 
- end
+   EW_bj = (Lw_bj * del_M).^3 * (1 + f_tWp * w);
+   EW_ji = (Lw_js * del_M).^3 * (1 + f_tWp * w);
+   
+   EWwp = [EW_bj; EW_ji]; % catenate lengths
    
    %% ocean
    % length-reprod
@@ -174,7 +158,7 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
   %% ocean
   % time-length 
    [t_j, t_p, t_b, l_j, l_p, l_b, l_i, rho_j, rho_B, info] = get_tj(pars_tj, f_tL);
-   rT_B = TC_tWwps * rho_B * k_M;  % 1/d, von Bert growth rate   
+   rT_B = TC_tLps * rho_B * k_M;  % 1/d, von Bert growth rate   
 %    rT_j = TC_tLps * rho_j * k_M;  % 1/d, exponential growth rate
 %    aT_b = t_b/ k_M/ TC_tLps; aT_j = t_j/ k_M/ TC_tLps;   
   % t_j = aT_j - aT_b; % time since birth at metamorphosis
@@ -185,9 +169,9 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
   % EL_bj = Lw_b * exp(t_bj * rT_j/3); % exponential growth as V1-morph
    %t_ji = tLps(tLps(:,1) >= t_j,1); % selects times after metamorphosis
 %    t_ji = tLps(:,1)
-  % Lw_s= 20;%data.tLps(1,2);
+   Lw_s= 20;%data.tLps(1,2);
 %    tLps(:,1)=data.tLps(:,1)- 2*365;
-   %EL_ps = Lw_i - (Lw_i - Lw_s) .* exp( - rT_B .* (tLps(:,1) - tLps(1,1))); % cm, expected length at time
+   EL_ps = Lw_i - (Lw_i - Lw_s) .* exp( - rT_B .* (tLps(:,1) - tLps(1,1))); % cm, expected length at time
   % ELw = [EL_bj; EL_ji]; % catenate lengths
 
   %% ocean
@@ -195,87 +179,21 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
     Lw = Lw_i - (Lw_i - Lw_0) .* exp( - rT_B .* tWwps(:,1)); % cm, expected length at time
    EWwps = (del_M * Lw).^3 * (1 + f_tL * w);
    
- 
+% 
 %    % tLps bis no bertalanffy
-        %%% bine choisir son etat initial: prendre smolt si on peut le
-        %%% definir
-  
-        % L0 = 20* del_M; % Condition initiale
-  % E0 = L0^3 * p_Am/ v; H0 = E_Hj;
-
-   %L0 = Lw_j* del_M; % Condition initiale
-   L0=Lj;
-   E0 = L0^3 * p_Am/ v; H0 = E_Hj;
-  
-  %    f1 = f_ShelClar1995; f0 = 0.6 * f_ShelClar1995; f2 = 0.8 * f_ShelClar1995;  % -, set food levels
-
-   ELHR_0 = [f_tL * E0; L0; H0;0];
-    
-   temp.tLps(:,1)=temp.tLps(:,1)-aT_j;
-    [a ELHR] = ode45(@dget_ELHR, [0; tLps(:,1)-aT_j], ELHR_0, [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, E_Hp, temp.tLps, T_A, T_ref);
+%   L0 = 20* del_M; % Condition initiale
+%   E0 = L0^3 * p_Am/ v; H0 = E_Hb;
+%   f1 = f_ShelClar1995; f0 = 0.6 * f_ShelClar1995; f2 = 0.8 * f_ShelClar1995;  % -, set food levels
+%   ELH_0 = [f0 * E0; L0; H0]; ELH_1 = [f1 * E0; L0; H0]; ELH_2 = [f2 * E0; L0; H0]; % state vector at start
+%   %
+%   [a ELH] = ode45(@dget_ELH_pj, [0; tL_ShelClar1995_1(:,1)], ELH_1, [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f1, E_Hb, E_Hj, tT.tL_ShelClar1995_1, T_A, T_ref); 
+%   ELH(1,:) = []; E = ELH(:,1); L = ELH(:,2); ELw_ShelClar1995_1 = L/ del_M;  EWw_ShelClar1995_1 = L.^3 + E * w_E/ mu_E/ d_E;  % g, wet weight
+%   %
    
-    
-    ELHR(1,:) = []; E = ELHR(:,1); L = ELHR(:,2); ELps = L/ del_M;  %EWw_ShelClar1995_1 = L.^3 + E * w_E/ mu_E/ d_E;  % g, wet weight warning pas R (seulement juv)
-%EWw_ShelClar1995_1 = L.^3 + (E+R) * w_E/ mu_E/ d_E;
-%ELps = ELHR(:,2);
 
-
-   % pack to output
+  % pack to output
   prdData.LR = ER;
   prdData.LWd = EWd;
-  prdData.tLps = ELps;
- % prdData.tLps = ELp;
+  prdData.tLps = EL_ps;
   prdData.tWwps = EWwps;
   prdData.tWwp = EWwp;
-end 
-  
-  
-%% sub subfuctions
-
-function dELHR = dget_ELHR(t, ELHR, Lb, Lj, Lm, p_Am, v, g, kJ, kap, f, Hb, Hj, Hp, tT, T_A, T_ref)
-  %  change in state variables during juvenile stage (smolt)
-  %  dELH = dget_ELH_p_pj(t, ELH)
-  %  ELH: 4-vector
-  %   E: reserve E
-  %   L: structural length
-  %   H: maturity E_H
-  %   R: Repro
-  %  dELH: change in reserve, length, scaled maturity
-  
- 
-  %  unpack variables
-  E = ELHR(1); L = ELHR(2); H = ELHR(3); R = ELHR(4);
-  
-  TC = tempcorr(C2K(spline1(t, tT)), T_ref, T_A); %% spline1 interpol lineaire a test ou a faire en amont (fit transfo de fourier)
-  vT = v * TC; kT_J = kJ * TC; pT_Am = p_Am * TC;
- 
-  if H < Hb 
-    s = 1; % -, multiplication factor for v and {p_Am}
-  elseif H < Hj
-    s = L/ Lb;
-  else
-    s = Lj/ Lb;
-  end
-  
-  e = vT * E/ L^3/ pT_Am; % -, scaled reserve density; 
-  rT = s * vT * (e/ L - 1/ Lm/ s)/ (e + g); % 1/d, spec growth rate
-  pT_C = E * (s * vT/ L - rT); % cm^2, scaled mobilisation
-  
-  % generate dH/dt, dE/dt, dL/dt
-  dE = (L > Lb) * s * pT_Am * f * L^2 - pT_C;
-  dL = rT * L/3;
-  
-  if H < Hp
-  dH = (1 - kap) * pT_C - kT_J * H; dR = 0;
-  else
-  dR = (1 - kap) * pT_C - kT_J * H; dH = 0;
-  end
-  
-  % pack derivatives
-  dELHR = [dE; dL; dH; dR];
-end
-
- 
-
-
-
