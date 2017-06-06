@@ -604,7 +604,7 @@ bibkey.LR = 'Thorpe1984'; temp.LR = C2K(7);%%% regarder ref
 % 
 %weights.tWwp = weights.tWwp * 10; 
 
-weights.tLps = weights.tLps * 100; 
+weights.tLps = weights.tLps * 1; 
 %weights.tWwps = weights.tWwps * 100; 
 % weights.tW1 = weights.tW1 * 10; 
 % weights.tL1 = weights.tL1 * 10; 
