@@ -15,7 +15,7 @@ estim_pars;          % run estimation
 %return
 
  estim_options('pars_init_method', 1);
- estim_options('results_output', 2);
+ estim_options('results_output', 1);
  estim_pars; 
  
  for i = 1:10
