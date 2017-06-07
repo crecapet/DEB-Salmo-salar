@@ -212,7 +212,7 @@ function [prdData, info] = predict_Salmo_salar(par, data, auxData)
    ELHR_0 = [f_tL * E0; L0; H0;0];
     
    temp.tLps(:,1)=temp.tLps(:,1)-aT_j;
-    [a ELHR] = ode45(@dget_ELHR, [0; tLps(:,1)-aT_j], ELHR_0, [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f, E_Hb, E_Hj, E_Hp, temp.tLps, T_A, T_ref);
+    [a ELHR] = ode45(@dget_ELHR, [0; tLps(:,1)-aT_j], ELHR_0, [], L_b, L_j, L_m, p_Am, v, g, k_J, kap, f_tL, E_Hb, E_Hj, E_Hp, temp.tLps, T_A, T_ref);
    
     
     ELHR(1,:) = []; E = ELHR(:,1); L = ELHR(:,2); ELps = L/ del_M;  %EWw_ShelClar1995_1 = L.^3 + E * w_E/ mu_E/ d_E;  % g, wet weight warning pas R (seulement juv)

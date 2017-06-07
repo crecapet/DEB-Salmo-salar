@@ -15,19 +15,12 @@ estim_pars;          % run estimation
 %return
 
  estim_options('pars_init_method', 1);
- estim_options('results_output', 2);
- estim_options('method', 'nm');
+ estim_options('results_output', 1);
  estim_pars; 
  
  for i = 1:10
      estim_pars;          % run estimation
  end
-
- estim_options('pars_init_method', 1);
- estim_options('results_output', 1);
- estim_options('method', 'no');
- estim_pars; 
- 
- 
+% 
  load results_Salmo_salar_T
  prt_report_my_pet(metaData,metaPar,par)
